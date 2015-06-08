@@ -6,6 +6,7 @@ import javax.persistence.*;
  * Created by star on 15/5/12.
  */
 @Entity
+@Table(name = "t_jd_product_area")
 public class JDProductArea extends BaseDomain{
     @Column
     private String area;

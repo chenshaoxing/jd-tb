@@ -21,7 +21,7 @@
     <!--<bean id="staffService" class="com.hr.system.manage.service.impl.StaffServiceImpl" />-->
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://10.211.55.4:3306/test?autoreconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8" />
+        <property name="url" value="jdbc:mysql://localhost:3306/tu?autoreconnect=true&amp;useUnicode=true&amp;characterEncoding=utf8" />
         <property name="username" value="root" />
         <property name="password" value="root" />
         <property name="validationQuery" value="select 1" />
@@ -34,32 +34,38 @@
         <property name="maxWait" value="30000" />
     </bean>
 
+    <bean id="taoBaoClient"  class="com.taobao.api.DefaultTaobaoClient">
+        <constructor-arg name="serverUrl" value="${mvn.app.url}"></constructor-arg>
+        <constructor-arg name="appKey" value="${mvn.app.key}"></constructor-arg>
+        <constructor-arg name="appSecret" value="${mvn.app.secret}"></constructor-arg>
+    </bean>
+
     <!-- Timer schedule -->
 
     <!--要调度的对象-->
-    <bean id="jobBean" class="com.star.crawl.job.DailyJdTaskJob" />
-    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
-        <property name="targetObject" ref="jobBean" />
-        <property name="targetMethod" value="execute" />
-        <!--将并发设置为false-->
-        <property name="concurrent" value="false" />
-    </bean>
+    <!--<bean id="jobBean" class="com.star.crawl.job.DailyJdTaskJob" />-->
+    <!--<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
+        <!--<property name="targetObject" ref="jobBean" />-->
+        <!--<property name="targetMethod" value="execute" />-->
+        <!--&lt;!&ndash;将并发设置为false&ndash;&gt;-->
+        <!--<property name="concurrent" value="false" />-->
+    <!--</bean>-->
 
-    <bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="jobDetail" />
-        <!--表达式，我的是每天0点 执行一次-->
-        <property name="cronExpression" value="0 0 8 * * ?" />
-    </bean>
+    <!--<bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
+        <!--<property name="jobDetail" ref="jobDetail" />-->
+        <!--&lt;!&ndash;表达式，我的是每天0点 执行一次&ndash;&gt;-->
+        <!--<property name="cronExpression" value="0 0 8 * * ?" />-->
+    <!--</bean>-->
 
     <!--&lt;!&ndash;  总管理类如果将lazy-init='false'那么容器启动就会执行调度程序   &ndash;&gt;-->
-    <bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" >
-        <property name="triggers">
-            <list>
-                <!--作业调度器,list下可加入其他的调度器-->
-                <ref bean="trigger" />
-            </list>
-        </property>
-    </bean>
+    <!--<bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" >-->
+        <!--<property name="triggers">-->
+            <!--<list>-->
+                <!--&lt;!&ndash;作业调度器,list下可加入其他的调度器&ndash;&gt;-->
+                <!--<ref bean="trigger" />-->
+            <!--</list>-->
+        <!--</property>-->
+    <!--</bean>-->
 
     <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${email.host}"/>
