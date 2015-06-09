@@ -43,29 +43,29 @@
     <!-- Timer schedule -->
 
     <!--要调度的对象-->
-    <!--<bean id="jobBean" class="com.star.crawl.job.DailyJdTaskJob" />-->
-    <!--<bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">-->
-        <!--<property name="targetObject" ref="jobBean" />-->
-        <!--<property name="targetMethod" value="execute" />-->
-        <!--&lt;!&ndash;将并发设置为false&ndash;&gt;-->
-        <!--<property name="concurrent" value="false" />-->
-    <!--</bean>-->
+    <bean id="jobBean" class="com.star.crawl.task.ScanJDProductInfoTask" />
+    <bean id="jobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="jobBean" />
+        <property name="targetMethod" value="scan" />
+        <!--将并发设置为false-->
+        <property name="concurrent" value="false" />
+    </bean>
 
-    <!--<bean id="trigger" class="org.springframework.scheduling.quartz.CronTriggerBean">-->
-        <!--<property name="jobDetail" ref="jobDetail" />-->
-        <!--&lt;!&ndash;表达式，我的是每天0点 执行一次&ndash;&gt;-->
-        <!--<property name="cronExpression" value="0 0 8 * * ?" />-->
-    <!--</bean>-->
+    <bean id="scanTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="jobDetail" />
+        <!--表达式，我的是每天0点 执行一次-->
+        <property name="cronExpression" value="50 1 * * * ?" />
+    </bean>
 
-    <!--&lt;!&ndash;  总管理类如果将lazy-init='false'那么容器启动就会执行调度程序   &ndash;&gt;-->
-    <!--<bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" >-->
-        <!--<property name="triggers">-->
-            <!--<list>-->
-                <!--&lt;!&ndash;作业调度器,list下可加入其他的调度器&ndash;&gt;-->
-                <!--<ref bean="trigger" />-->
-            <!--</list>-->
-        <!--</property>-->
-    <!--</bean>-->
+    <!--  总管理类如果将lazy-init='false'那么容器启动就会执行调度程序   -->
+    <bean id="startQuertz" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" >
+        <property name="triggers">
+            <list>
+                <!--作业调度器,list下可加入其他的调度器-->
+                <ref bean="scanTrigger" />
+            </list>
+        </property>
+    </bean>
 
     <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="${email.host}"/>
@@ -94,17 +94,7 @@
     </bean>
 
 
-    <!--<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">-->
-        <!--<property name="driverClassName" value="com.mysql.jdbc.Driver" />-->
-        <!--<property name="url" value="jdbc:mysql://10.211.55.4:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true" />-->
-        <!--&lt;!&ndash;<property name="url" value="jdbc:mysql://localhost:3306/test?useUnicode=true&amp;characterEncoding=utf8&amp;autoReconnect=true" />&ndash;&gt;-->
-        <!--&lt;!&ndash;<property name="url" value="jdbc:mysql://sqld.duapp.com:4050/eBdYFaVHDRBXyIkrimel?autoReconnect=true"/>&ndash;&gt;-->
-        <!--<property name="username" value="root" />-->
-        <!--&lt;!&ndash;<property name="username" value="KHRdaNSHIU1AvMVoIc7EEU1C" />&ndash;&gt;-->
-        <!--<property name="password" value="root" />-->
-        <!--&lt;!&ndash;<property name="password" value="RdgWkOmLn1lsDWr50Evu8sV2sidhNB45" />&ndash;&gt;-->
 
-    <!--</bean>-->
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
         <!--  配置Hibernate拦截器,用于同步索引-->
@@ -124,10 +114,11 @@
         <property name="sessionFactory" ref="sessionFactory" />
     </bean>
 
-    <!--&lt;!&ndash;使用annotation定义事务，这句不加貌似也可以&ndash;&gt;-->
+    <!--使用annotation定义事务，这句不加貌似也可以-->
 
     <tx:annotation-driven transaction-manager="transactionManager" />
 
-    <!--<aop:aspectj-autoproxy />&lt;!&ndash;切面编程的声明&ndash;&gt;-->
+    <!--<aop:aspectj-autoproxy />-->
+    <!--切面编程的声明-->
 
 </beans>

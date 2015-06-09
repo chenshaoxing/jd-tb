@@ -10,7 +10,7 @@ import java.util.Set;
 @Entity
 @Table(name = "t_jd_product")
 public class JDProduct extends BaseDomain {
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinTable(name = "t_jd_tb_relation",
             joinColumns = { @JoinColumn(name = "jd_id", referencedColumnName = "id") },
             inverseJoinColumns = { @JoinColumn(name = "tb_id", referencedColumnName = "id") })

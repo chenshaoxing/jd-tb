@@ -16,7 +16,7 @@ import java.util.List;
  * function:
  * To change this template use File | Settings | File Templates.
  */
-@Service
+@Service(value = "taoBaoProductServiceImpl")
 public class TaoBaoProductServiceImpl implements TaoBaoProductService{
     @Resource
     private IBasePersistence basePersistence;

@@ -21,7 +21,7 @@ import javax.annotation.Resource;
  * function:
  * To change this template use File | Settings | File Templates.
  */
-@Service
+@Service(value = "taoBaoProductInfoService")
 public class TaoBaoProductInfoService {
     private static final Logger LOG = LoggerFactory.getLogger(TaoBaoProductInfoService.class);
 
@@ -50,6 +50,10 @@ public class TaoBaoProductInfoService {
             ItemPriceUpdateRequest req=new ItemPriceUpdateRequest();
             req.setNumIid(taoBaoProduct.getNumIid());
             req.setPrice(taoBaoProduct.getPrice() + "");
+            req.setNum(100l);
+//            req.setSkuPrices(taoBaoProduct.getPrice()+","+(taoBaoProduct.getPrice()-5));
+//            req.setSkuPrices("10.00,5.00");
+//            req.setSkuProperties("pid:vid;pid:vid");
             ItemPriceUpdateResponse response = taobaoClient.execute(req , sessionKey);
             return response.isSuccess();
         }catch (Exception e){
