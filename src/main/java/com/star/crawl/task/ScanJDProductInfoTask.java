@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import sun.rmi.runtime.Log;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -51,7 +52,9 @@ public class ScanJDProductInfoTask {
                     Map<String,Object> result = crawlJdProductInfoService.crawl(jd.getSkuid());
                     if(result != null){
                         Float price = Float.valueOf(result.get("price").toString());
-                        if(price != jd.getPrice()){
+                        BigDecimal latestPrice = new BigDecimal(price);
+                        BigDecimal afterPrice = new BigDecimal(jd.getPrice());
+                        if(latestPrice.compareTo(afterPrice) != 0){
                             jd.setPrice(price);
                             jd.setDiscount(Float.valueOf(result.get("discount").toString()));
                             jd.setName(result.get("name").toString());
