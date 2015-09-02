@@ -94,11 +94,11 @@ public class CrawlTaoBao {
             if(isStop){
                 break;
             }
-            shopCrawlUrl = shopCrawlUrl+i;
+            String url = shopCrawlUrl+i;
 //            String myurl = "https://fuckbug.taobao.com/i/asynSearch.htm?_ksTS=1441112489944_268&callback=jsonp269&mid=w-129628754-0&wid=129628754&search=y&spm=a1z10.1-c.0.0.dSqoFq&pageNo="+i;
 //            String jingchaourl = "https://shop129597975.taobao.com/i/asynSearch.htm?_ksTS=1441174290828_108&callback=jsonp109&mid=w-12037889555-0&wid=12037889555&path=/search.htm&search=y&spm=a1z10.1-c.0.0.yfDgSS&pageNo="+i;
 //            String shazurl = "https://shop126833539.taobao.com/i/asynSearch.htm?_ksTS=1441174433512_122&callback=jsonp123&mid=w-11648329877-0&wid=11648329877&path=/category.htm&spm=a1z10.3-c.w4010-11648329875.2.wCaLZN&search=y&pageNo="+i;
-            Spider.create(new Processor(list)).addUrl(shopCrawlUrl).thread(1).run();
+            Spider.create(new Processor(list)).addUrl(url).thread(1).run();
             i++;
         }
         return list;
@@ -107,8 +107,9 @@ public class CrawlTaoBao {
 
     public static void main(String[] args) throws Exception{
         String shazurl = "https://shop126833539.taobao.com/i/asynSearch.htm?_ksTS=1441174433512_122&callback=jsonp123&mid=w-11648329877-0&wid=11648329877&path=/category.htm&spm=a1z10.3-c.w4010-11648329875.2.wCaLZN&search=y";
+        String jingchaourl = "https://shop129597975.taobao.com/i/asynSearch.htm?_ksTS=1441174290828_108&callback=jsonp109&mid=w-12037889555-0&wid=12037889555&path=/search.htm&search=y&spm=a1z10.1-c.0.0.yfDgSS";
         CrawlTaoBao crawlTaoBao = new CrawlTaoBao();
-        List list = crawlTaoBao.crawlTaoBao(shazurl);
+        List list = crawlTaoBao.crawlTaoBao(jingchaourl);
         System.out.println(list.size());
     }
 }
