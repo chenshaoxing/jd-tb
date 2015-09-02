@@ -20,7 +20,8 @@ import java.util.List;
 public class GetJdPriceDemo {
     public static void main(String[] args) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet httpGet = new HttpGet("http://p.3.cn/prices/get?skuid=J_627718&type=1&area=22_1930_50947&callback=cnp");
+//        HttpGet httpGet = new HttpGet("http://p.3.cn/prices/get?skuid=J_627718&type=1&area=22_1930_50947&callback=cnp");
+        HttpGet httpGet = new HttpGet("http://p.3.cn/prices/get?type=1&area=12&callback=cnp&skuid=J_627718");
         System.out.println("executing request "+httpGet.getURI());
         CloseableHttpResponse response = httpClient.execute(httpGet);
         HttpEntity entity = response.getEntity();
@@ -31,12 +32,9 @@ public class GetJdPriceDemo {
             String data = EntityUtils.toString(entity);
             System.out.println("Response content: " +data );
             data = data.substring(data.indexOf("(")+1,data.lastIndexOf(")"));
-            List<PriceEntity> list = JSON.parseArray(data,PriceEntity.class);
-            for(PriceEntity p:list){
-                System.out.println(p.getId());
-                System.out.println(p.getP());
-                System.out.println(p.getM());
-            }
+            data = data.substring(data.indexOf("[")+1,data.indexOf("]"));
+            JSONObject priceOjb = JSON.parseObject(data);
+            System.out.println(priceOjb);
         }
         response.close();
         httpClient.close();
