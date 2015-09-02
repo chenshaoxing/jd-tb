@@ -30,20 +30,15 @@ public class DemoProcessor1  implements PageProcessor {
     }
 
     public DemoProcessor1() {
+
     }
 
-    public static  boolean isStop = false;
+    private static  boolean isStop = false;
     List<Map<String,Object>> list;
 
     @Override
     public void process(Page page) {
-//        page.addTargetRequest("http://item.jd.com/627718.html");
-//        page.addTargetRequest("https://item.taobao.com/item.htm?id=42045723162");
         Document document = page.getHtml().getDocument();
-//        Element element = page.getHtml().getDocument().getElementById("J_StrPrice");
-//        page.putField("id",page.getUrl().regex());
-//        page.putField("name",page.getHtml().xpath("//script/text()").get());
-//        System.out.println(page.getResultItems().get("price"));
         String text = document.body().children().get(1).html().replaceAll("&quot;","").replaceAll("\\\\", "");
         Document doc = Jsoup.parse(text);
         Elements total = doc.getElementById("shop-search-list").getElementsByClass("search-result");
@@ -56,37 +51,38 @@ public class DemoProcessor1  implements PageProcessor {
         }
         Elements elements = doc.getElementsByClass("item");
         for(Element element : elements){
-            Map<String,Object> product = new HashMap<String, Object>();
-            product.put("id",element.attr("data-id"));
-            System.out.println("id:"+element.attr("data-id"));
-            Elements item = element.children();
-            if(item.size() == 3){
-                Element photo = item.get(0);
-                Elements img = photo.getElementsByTag("img");
-                if(img.size() == 1){
-                    System.out.println("图片:"+img.get(0).attr("src"));
-                    product.put("img","https:"+img.get(0).attr("src"));
-                }
-                Element detail = item.get(1);
-                Elements detailChild = detail.children();
-                if(detailChild.size() ==  2){
-                    Element detailE = detailChild.get(0);
-                    System.out.println("title: "+detailE.text());
-                    product.put("title",detailE.text());
-                    Elements elements1 = detailChild.get(1).getElementsByClass("c-price");
-                    if(elements1.size() == 1){
-                        System.out.println("price: "+elements1.get(0).text());
-                        product.put("price",elements1.get(0).text());
+            try{
+                Map<String,Object> product = new HashMap<String, Object>();
+                product.put("id",element.attr("data-id"));
+                System.out.println("id:"+element.attr("data-id"));
+                Elements item = element.children();
+                if(item.size() == 3){
+                    Element photo = item.get(0);
+                    Elements img = photo.getElementsByTag("img");
+                    if(img.size() == 1){
+                        System.out.println("图片:"+img.get(0).attr("src"));
+                        product.put("img","https:"+img.get(0).attr("src"));
+                    }
+                    Element detail = item.get(1);
+                    Elements detailChild = detail.children();
+                    if(detailChild.size() ==  2){
+                        Element detailE = detailChild.get(0);
+                        System.out.println("title: "+detailE.text());
+                        product.put("title",detailE.text());
+                        Elements elements1 = detailChild.get(1).getElementsByClass("c-price");
+                        if(elements1.size() == 1){
+                            System.out.println("price: "+elements1.get(0).text());
+                            product.put("price",elements1.get(0).text());
+                        }
                     }
                 }
+                list.add(product);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
             }
-            list.add(product);
+
+
         }
-//        System.out.println(page.getHtml().getDocument().head().toString());
-//        int size = page.getHtml().getDocument().head().children().size();
-//        String data = page.getHtml().getDocument().head().child(size-2).toString();
-//        System.out.println(data);
-//        System.out.println(page.getHtml().toString());
     }
 
     @Override
@@ -95,15 +91,10 @@ public class DemoProcessor1  implements PageProcessor {
     }
 
     public static void main(String[] args) throws Exception {
-        test();
-//            DemoProcessor demoProcessor = new DemoProcessor();
-//            demoProcessor.test();
-//        Spider.create(new DemoProcessor()).addUrl("http://item.jd.com/740771.html").thread(1).run();
-//        Spider.create(new DemoProcessor()).addUrl("https://item.taobao.com/item.htm?id=42045723162").thread(1).run();
-
+//        test();
     }
 
-    public static void test() throws Exception{
+    public List<Map<String,Object>> crawlTaoBao() throws Exception{
         int i = 1;
         List<Map<String,Object>> list = new ArrayList<Map<String, Object>>();
         isStop = false;
@@ -117,7 +108,7 @@ public class DemoProcessor1  implements PageProcessor {
             Spider.create(new DemoProcessor1(list)).addUrl(shazurl).thread(1).run();
             i++;
         }
-        System.out.println(list);
+        return list;
 
     }
 }
